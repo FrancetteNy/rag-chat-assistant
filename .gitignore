@@ -1,0 +1,15 @@
+# Variables d'environnement — ne jamais committer la clé API
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# ChromaDB (base de données locale générée automatiquement)
+chroma_db/
+
+# macOS
+.DS_Store
