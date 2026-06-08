@@ -9,15 +9,17 @@ client = OpenAI(
     base_url="https://api.groq.com/openai/v1"
 )
 
-MODEL = "llama-3.1-8b-instant"
+MODEL = "llama-3.3-70b-versatile"
+
 def generate(query: str, chunks: list[dict]) -> str:
     """Generate an answer based on retrieved chunks."""
     context = "\n\n---\n\n".join(
         f"[Source: {c['source']}]\n{c['content']}" for c in chunks
     )
 
-    system_prompt = f"""You are a helpful assistant that answers questions based ONLY on the provided context.
-If the answer is not in the context, say so clearly. Do not make up information.
+    system_prompt = f"""You are an expert assistant. Answer the user's question thoroughly and precisely based on the provided context.
+Structure your answer clearly. If the context contains partial information, use it and indicate what is missing.
+If the answer is not in the context at all, say so clearly. Do not make up information.
 
 CONTEXT:
 {context}"""
