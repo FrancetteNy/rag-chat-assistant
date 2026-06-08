@@ -28,7 +28,7 @@ The system only answers based on the content of your documents. If the answer is
 
 | Layer | Technology |
 |---|---|
-| LLM | Groq (Llama 3.1 — OpenAI-compatible API) |
+| LLM | Groq (Llama 3.3 70B — OpenAI-compatible API) |
 | Embeddings | sentence-transformers (`all-MiniLM-L6-v2`) |
 | Vector database | ChromaDB |
 | Backend API | FastAPI |
@@ -82,10 +82,6 @@ cd rag-chat-assistant
 cp .env.example .env
 # Add your Groq API key to .env
 
-# Place your PDF files in the documents/ folder
-# Then index them:
-python3 app/ingestion.py
-
 docker-compose up --build
 ```
 
@@ -101,7 +97,6 @@ pip install -r requirements.txt
 cp .env.example .env
 # Add your Groq API key
 
-python3 app/ingestion.py
 uvicorn app.api:app --reload &
 streamlit run streamlit_app.py
 ```
@@ -110,8 +105,9 @@ streamlit run streamlit_app.py
 
 ## API
 
-The FastAPI backend exposes a single endpoint:
+The FastAPI backend exposes two endpoints:
 
+**Chat**
 ```
 POST /chat
 Content-Type: application/json
@@ -127,13 +123,30 @@ Response:
 }
 ```
 
+**Upload**
+```
+POST /upload
+Content-Type: multipart/form-data
+
+file: <your PDF>
+```
+
+Response:
+```json
+{
+  "filename": "paper.pdf",
+  "chunks_indexed": 148,
+  "message": "'paper.pdf' successfully indexed (148 chunks)."
+}
+```
+
 Interactive API documentation available at `http://localhost:8000/docs`.
 
 ---
 
 ## Roadmap
 
-- [ ] Document upload via the UI (drag & drop)
+- [x] Document upload via the UI (drag & drop)
 - [ ] Multi-document support with source filtering
 - [ ] Conversational memory (multi-turn chat)
 - [ ] Evaluation metrics (faithfulness, relevance)
